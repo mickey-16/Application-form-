@@ -85,6 +85,35 @@ $(document).ready(function() {
             $('html, body').animate({
                 scrollTop: $('.error').first().offset().top - 100
             }, 500);
+        } else {
+            // Prevent default form submission
+            e.preventDefault();
+            
+            // Store form data
+            const formData = {
+                fullName: fullName,
+                usn: usn,
+                department: department,
+                year: year,
+                section: section,
+                phone: phone,
+                email: email,
+                referenceNumber: 'REG' + new Date().toISOString().slice(0,10).replace(/-/g,'') + Math.floor(Math.random() * 9000 + 1000),
+                submissionDate: new Date().toLocaleString('en-US', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric', 
+                    hour: 'numeric', 
+                    minute: 'numeric', 
+                    hour12: true 
+                })
+            };
+            
+            // Store in sessionStorage
+            sessionStorage.setItem('registrationData', JSON.stringify(formData));
+            
+            // Redirect to confirmation page
+            window.location.href = 'confirmation.html';
         }
     });
 

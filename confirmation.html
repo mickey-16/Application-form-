@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="confirmation-wrapper">
+            
+            <!-- Success Icon -->
+            <div class="success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                </svg>
+            </div>
+
+            <!-- Success Message -->
+            <div class="success-message">
+                <h1>Registration Successful!</h1>
+                <p>Your application has been submitted successfully.</p>
+            </div>
+
+            <!-- Student Details Card -->
+            <div class="details-card">
+                <h2 style="color: #333; margin-bottom: 25px; font-size: 20px; border-bottom: 2px solid #667eea; padding-bottom: 10px;">
+                    Student Information
+                </h2>
+
+                <div class="detail-row">
+                    <div class="detail-label">Reference Number:</div>
+                    <div class="detail-value"><strong style="color: #667eea;" id="refNumber"></strong></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Full Name:</div>
+                    <div class="detail-value" id="displayName"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">USN Number:</div>
+                    <div class="detail-value" id="displayUsn"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Department:</div>
+                    <div class="detail-value" id="displayDept"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Year:</div>
+                    <div class="detail-value" id="displayYear"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Section:</div>
+                    <div class="detail-value" id="displaySection"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Phone Number:</div>
+                    <div class="detail-value" id="displayPhone"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Email:</div>
+                    <div class="detail-value" id="displayEmail"></div>
+                </div>
+
+                <div class="detail-row">
+                    <div class="detail-label">Submission Date:</div>
+                    <div class="detail-value" id="displayDate"></div>
+                </div>
+            </div>
+
+            <!-- Additional Information -->
+            <div style="background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; border-radius: 5px; margin-bottom: 25px;">
+                <p style="color: #856404; margin: 0; font-size: 14px;">
+                    <strong>Note:</strong> Please save your reference number <strong id="refNumberNote"></strong> for future correspondence.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; gap: 15px;">
+                <button onclick="downloadPDF()" class="btn-submit" style="flex: 1;">Download PDF</button>
+                <a href="index.html" class="back-button" style="flex: 1; text-align: center; line-height: 46px; text-decoration: none;">Submit Another Application</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if data exists
+        const registrationData = sessionStorage.getItem('registrationData');
+        
+        if (!registrationData) {
+            // Redirect back to form if no data
+            window.location.href = 'index.html';
+        } else {
+            // Parse and display data
+            const data = JSON.parse(registrationData);
+            
+            document.getElementById('refNumber').textContent = data.referenceNumber;
+            document.getElementById('refNumberNote').textContent = data.referenceNumber;
+            document.getElementById('displayName').textContent = data.fullName;
+            document.getElementById('displayUsn').textContent = data.usn;
+            document.getElementById('displayDept').textContent = data.department;
+            document.getElementById('displayYear').textContent = data.year;
+            document.getElementById('displaySection').textContent = data.section;
+            document.getElementById('displayPhone').textContent = data.phone;
+            document.getElementById('displayEmail').textContent = data.email;
+            document.getElementById('displayDate').textContent = data.submissionDate;
+        }
+
+        // Download PDF function
+        function downloadPDF() {
+            const data = JSON.parse(sessionStorage.getItem('registrationData'));
+            
+            // Create printable content
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Student Registration - ${data.referenceNumber}</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            max-width: 800px;
+                            margin: 40px auto;
+                            padding: 20px;
+                        }
+                        .header {
+                            text-align: center;
+                            margin-bottom: 30px;
+                            border-bottom: 3px solid #667eea;
+                            padding-bottom: 20px;
+                        }
+                        .header h1 {
+                            color: #667eea;
+                            margin-bottom: 10px;
+                        }
+                        .info-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin: 20px 0;
+                        }
+                        .info-table td {
+                            padding: 12px;
+                            border: 1px solid #ddd;
+                        }
+                        .info-table td:first-child {
+                            background: #f5f5f5;
+                            font-weight: bold;
+                            width: 40%;
+                        }
+                        .note {
+                            background: #fff3cd;
+                            border-left: 4px solid #ffc107;
+                            padding: 15px;
+                            margin-top: 20px;
+                            color: #856404;
+                        }
+                        @media print {
+                            body { margin: 0; }
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>Student Registration Confirmation</h1>
+                        <p>Registration completed successfully</p>
+                    </div>
+                    
+                    <table class="info-table">
+                        <tr>
+                            <td>Reference Number</td>
+                            <td><strong style="color: #667eea;">${data.referenceNumber}</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Full Name</td>
+                            <td>${data.fullName}</td>
+                        </tr>
+                        <tr>
+                            <td>USN Number</td>
+                            <td>${data.usn}</td>
+                        </tr>
+                        <tr>
+                            <td>Department</td>
+                            <td>${data.department}</td>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td>${data.year}</td>
+                        </tr>
+                        <tr>
+                            <td>Section</td>
+                            <td>${data.section}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone Number</td>
+                            <td>${data.phone}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>${data.email}</td>
+                        </tr>
+                        <tr>
+                            <td>Submission Date</td>
+                            <td>${data.submissionDate}</td>
+                        </tr>
+                    </table>
+                    
+                    <div class="note">
+                        <strong>Note:</strong> Please save your reference number <strong>${data.referenceNumber}</strong> for future correspondence.
+                    </div>
+                </body>
+                </html>
+            `);
+            
+            printWindow.document.close();
+            
+            // Wait for content to load, then print
+            setTimeout(() => {
+                printWindow.print();
+            }, 250);
+        }
+    </script>
+</body>
+</html>
